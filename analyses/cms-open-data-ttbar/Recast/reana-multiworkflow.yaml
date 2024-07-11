@@ -1,0 +1,20 @@
+version: 0.8.0
+inputs:
+  files:
+    - fix-env.sh
+    - across_workflow_patching.ipynb
+
+workflow:
+  type: serial
+  specification:
+    steps:
+      - name: fetchdata
+        environment:  docker.io/reanahub/reana-client:0.9.3
+        commands:
+          - REANA_SERVER_URL=https://reana.cern.ch reana-client download -w new-sample-test.20 histograms_merged_newfiles.root
+          - REANA_SERVER_URL=https://reana.cern.ch reana-client download -w snakemake-test.3 histograms_merged.root
+      - name: runanalysis
+        environment: povstenandrii/ttbarkerberos:20240311
+        commands:
+          - /bin/bash -l && source fix-env.sh && papermill across_workflow_patching.ipynb sample_merged.ipynb -p merged_step Yes -k python3
+          - cp "acrossworkflow_merging.root" /eos/user/a/apovsten/multiworkflow/

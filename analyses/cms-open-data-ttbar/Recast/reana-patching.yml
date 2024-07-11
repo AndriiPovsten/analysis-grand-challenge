@@ -1,0 +1,18 @@
+version: 0.8.0
+inputs:
+  files:
+    - fix-env.sh
+    - patching.ipynb
+    - Snakefile_patching
+    - workspace.json
+    - workspace_1.json
+    - workspace_tW.json
+
+workflow:
+  type: snakemake
+  resources:
+    kerberos: true
+  file: Snakefile_patching
+outputs:
+  files:
+    - histograms_merged.root

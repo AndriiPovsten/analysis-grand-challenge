@@ -1,0 +1,9 @@
+rule all:
+    container:
+        "povstenandrii/reana-agc:20240506"
+    resources:
+        kubernetes_memory_limit="3700Mi"
+    input:
+        "patching.ipynb"
+    shell:
+        "source fix-env.sh && papermill patching.ipynb post_patching.ipynb -k python3 && mv workspace.json /eos/user/a/apovsten/REANA-AGC/"
