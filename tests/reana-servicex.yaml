@@ -1,0 +1,18 @@
+version: 0.6.0
+inputs:
+  files:
+    - servicex_query_test.ipynb
+    - fix-env.sh
+    - servicex.yaml
+  parameters:
+    notebook: servicex_query_test.ipynb
+    value1: True
+    value2: False 
+workflow:
+  type: serial 
+  specification:
+    steps:
+      - name: Massive data request test
+        environment: "povstenandrii/servicex-image:20240618"
+        commands:
+         - /bin/bash -l && source fix-env.sh && papermill ${notebook} output1.ipynb -p RUN_HISTOGRAMS ${value1} -p RUN_STAT ${value2} -k python3

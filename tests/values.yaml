@@ -1,0 +1,74 @@
+postgres:
+  enabled: false
+objectStore:
+  useTLS: false
+  enabled: true
+  publicURL: localhost:9000
+
+
+didFinder:
+  rucio:
+    enabled: false
+  CERNOpedData:
+    enabled: true
+    image: sslhep/servicex-did-finder-cernopendata
+    pullPolicy: Always
+    tag: arm64
+
+
+app:
+  checksImage: ubuntu:24.04
+  image: sslhep/servicex_app
+  tag: arm64
+
+
+
+codeGen:
+  atlasxaod:
+    enabled: false
+  uproot:
+    enabled: true
+    image: sslhep/servicex_code_gen_func_adl_uproot
+    pullPolicy: Always
+    tag: arm64
+    defaultScienceContainerImage: sslhep/servicex_func_adl_uproot_transformer
+    defaultScienceContainerTag: develop
+  cms:
+    enabled: false
+  python:
+    enabled: true
+    image: sslhep/servicex_code_gen_python
+    pullPolicy: Always
+    tag: arm64
+    defaultScienceContainerImage: sslhep/servicex_func_adl_uproot_transformer
+    defaultScienceContainerTag: develop
+
+noCerts: true
+
+minioCleanup:
+  enabled: false
+  image: sslhep/servicex_minio_cleanup
+  threads: "6"
+  logLevel: "INFO"
+  pullPolicy: Always
+  tag: arm64
+  schedule: "* */8 * * *"
+  maxAge: 30
+  maxSize: "1G"
+  normSize: "700M"
+
+transformer:
+  cachePrefix: '""'
+  sidecarImage: sslhep/servicex_sidecar_transformer
+  sidecarTag: arm64
+  sidecarPullPolicy: Always
+  scienceContainerPullPolicy: Always
+
+minio:
+  auth:
+    rootPassword: leftfoot1
+    rootUser: miniouser
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    periodSeconds: 60
